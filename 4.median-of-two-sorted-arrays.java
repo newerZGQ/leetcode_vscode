@@ -44,27 +44,26 @@ class Solution {
         int N = nums1.length + nums2.length;
         int retN = N / 2 + 1;
 
-        if (nums1.length > retN && nums1[nums1.length - 1] <= nums2[0]) {
-            return nums1[retN - 1];
-        }
-
-        if (nums2.length > retN && nums2[nums2.length - 1] <= nums2[0]) {
-            return nums2[retN - 1];
-        }
-
         int left = 0, right = nums1.length - 1;
-        int mid = 0;
+        int l, r;
         while (left <= right) {
-            mid = left + (right - left) / 2;
-            int l = mid;
-            int r = retN - mid - 1;
-            if (nums1[l] <= nums2[r + 1] && nums2[r] <= nums1[l]) {
-                break;
-            } else if (nums1[l] > nums2[r + 1]) {
+            int mid = (right - left) / 2 + left;
+            if (mid > retN - 1) {
                 right = mid - 1;
-            } else {
-                left = mid + 1;
+                continue;
             }
+            if (mid == retN - 1 && nums1[mid] < nums2[0]) {
+                l = mid;
+                r = -1;
+                break;
+            }
+            l = mid;
+            r = retN - (mid + 1) - 1;
+
+        }
+        if (left > right) {
+            l = -1;
+            r = retN - 1;
         }
         if (N / 2 == 0) {
             return (nums1[mid] + nums2[retN - mid - 1]) / 2;

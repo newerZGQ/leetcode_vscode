@@ -1,6 +1,9 @@
 import java.util.ArrayList;
+import java.util.Stack;
 
 import javax.swing.tree.TreeNode;
+
+import apple.laf.JRSUIUtils.Tree;
 
 /*
  * @lc app=leetcode id=104 lang=java
@@ -56,12 +59,23 @@ class Solution {
     }
     private int ite(TreeNode root) {
         if(root == null) return 0;
-        ArrayList<TreeNode> list = new ArrayList<>();
-        list.add(root);
+        TreeNode cur = root;
+        Stack<TreeNode> left = new Stack();
+        Stack<TreeNode> right = new Stack();
+        left.push(root);
         int res = 1;
-        for(TreeNode node : list){
-            
+        while(!left.isEmpty() || !right.isEmpty()){
+            Stack<TreeNode> full = left.isEmpty() ? right : left;
+            Stack empty = left.isEmpty() ? left : right;
+            while(!full.isEmpty()){
+                TreeNode tmp = full.pop();
+                if(tmp.left != null) empty.push(tmp.left);
+                if(tmp.right != null) empty.push(tmp.right);
+            }
+            if(empty.isEmpty()) return res;
+            res++;
         }
+        return res;
 
     }
 }
